@@ -73,8 +73,9 @@ function coroutine(ws)
         if !terminated && player_colour != both && (
             (Chess.is_white_turn(state) && player_colour != white) || 
             (!Chess.is_white_turn(state) && player_colour != black))
-            sleep(0.01)
-            action = rand(Chess.get_actions(state))
+            
+            probs = mcts(state, 500)
+            action = Chess.get_actions(state)[argmax(probs)]
         end
 
         # Perform move

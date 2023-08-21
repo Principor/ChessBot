@@ -5,4 +5,8 @@ export Chess
 using .Chess
 export ChessState
 
+include("agent/agent.jl")
+using .Agent
+export mcts
+
 end
