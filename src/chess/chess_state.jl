@@ -52,3 +52,7 @@ end
 function is_white_turn(state::ChessState)::Bool
     state.board.white_turn::Bool
 end
+
+function get_encoded_state(state::ChessState)
+    get_encoded_board(state.board)
+end

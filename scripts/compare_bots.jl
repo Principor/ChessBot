@@ -10,12 +10,11 @@ function simulate()
     terminated = false
     score = 0
     while !terminated
-        actions = Chess.get_actions(state)
         action = if Chess.is_white_turn(state)
-            probs = mcts(state, 500)
-            actions[action_index]
+            probs = mcts(model, state, 100)
+            action = rand(Categorical(probs))
         else
-            rand(actions)
+            rand(Chess.get_actions(state))
         end
         state = Chess.step(state, action)
         score, terminated = Chess.get_score_and_terminated(state)
@@ -36,7 +35,9 @@ function simulate()
     end
 end
 
-num_samples = 50
+model = Model()
+
+num_samples = 100
 start_time = now()
 results = [0,0,0]
 num_moves = 0

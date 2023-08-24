@@ -1,7 +1,7 @@
 using WebSockets
 using Sockets
 using Dates
-using Random
+using Distributions
 include("../src/ChessBot.jl")
 using .ChessBot
 
@@ -74,8 +74,8 @@ function coroutine(ws)
             (Chess.is_white_turn(state) && player_colour != white) || 
             (!Chess.is_white_turn(state) && player_colour != black))
             
-            probs = mcts(state, 500)
-            action = Chess.get_actions(state)[argmax(probs)]
+            probs = mcts(model, state, 100)
+            action = rand(Categorical(probs))
         end
 
         # Perform move
@@ -99,6 +99,8 @@ function coroutine(ws)
     delete!(messages, id)
     delete!(connections, id)
 end
+
+model = Model()
 
 function req2response(req)
     if req.target == "/"

@@ -354,6 +354,23 @@ function calculate_legal_moves(board::Board)::Tuple{Vector{Int16},Int8,Bool}
     all_moves[1:num_moves], num_moves, checked
 end
 
+function get_encoded_board(board::Board)
+    encoded = zeros(Float32, 12, 64)
+    piece_indices = get_player_piece_indices(board.white_turn)
+    for (i, piece_type) in enumerate(piece_indices)
+        bitboard = board.bitboards[piece_type]
+        while bitboard != 0
+            position_index = trailing_zeros(bitboard) + 1
+            if !board.white_turn
+                position_index = 65 - position_index
+            end
+            encoded[i, position_index] = true
+            bitboard &= bitboard - 1
+        end
+    end
+    encoded
+end
+
 function append_bitboard_to_movelist(all_moves::Vector{Int16}, num_moves::Int8, index::Int, move_bits::UInt64)::Int8
     while move_bits != 0
         all_moves[num_moves += 1] = (index - 1) * 64 + trailing_zeros(move_bits) + 1

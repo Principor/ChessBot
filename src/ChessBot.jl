@@ -7,6 +7,7 @@ export ChessState
 
 include("agent/agent.jl")
 using .Agent
+export Model
 export mcts
 
 end
